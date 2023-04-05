@@ -1,5 +1,16 @@
 #include "spkmeans_functions.h"
 
+double** getT(double **dots, int d, int n, int *k){
+    double** w = wam(dots, n, d);
+    double** ddg_res = ddg(w, n);
+    double** L = gl(w, ddg_res, n);
+    Jacobi_output *jacobi_output = jacobi(L, n);
+    double **T = calc_T(jacobi_output,n,k);
+    free_contiguous_mat(jacobi_output->V);
+    free(jacobi_output->eigenValues);
+    free(jacobi_output);
+    return T;
+}
 
 void printSpectralClustering(double **dots, int d, int n, int k ){
     double **T,**final_centroids, **initialCentroids;
@@ -54,7 +65,7 @@ int main(int argc, char** argv){
             n = n + 1;
         }
     }
-    centroids = allocateMatrix(n, d);
+    centroids = alloc_nXm_matrix(n, d);
     rewind(fp);
     for(int i = 0; i < n; i++){
         for(int j = 0; j < d; j++){
@@ -75,15 +86,15 @@ int main(int argc, char** argv){
     adj_matrix = wam(centroids, n, d);
     degree_matrix = ddg(adj_matrix, n);
     if(strcmp("wam", goal) == 0){
-        print_matrix(adj_matrix, n, n);
+        print_2d_array(adj_matrix, n, n);
     }
     else if(strcmp("ddg", goal) == 0){
-        print_matrix(degree_matrix, n, n);
+        print_2d_array(degree_matrix, n, n);
 
     }
     else if(strcmp("gl", goal) == 0){
         laplacian = gl(adj_matrix, degree_matrix, n);
-        print_matrix(laplacian, n, n);
+        print_2d_array(laplacian, n, n);
         free_contiguous_mat(laplacian);
     }
     else if(strcmp("spk",goal)==0){

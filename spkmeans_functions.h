@@ -31,10 +31,11 @@ double **calc_A_tag(double **A_tag, double **A, int n, rotation_mat *P);
 double calc_of_f_square(double **A, int n);
 void multiply_rotation_matrix(double **V, rotation_mat *P,int n);
 Jacobi_output* jacobi(double **A, int n);
-double** create2DfromJacobi(Jacobi_output *jacobi_output, int n)
+double** create2DfromJacobi(Jacobi_output *jacobi_output, int n);
 rotation_mat *calc_rotation_mat(rotation_mat *P,double **A, int n);
 int compare_eigenStruct(const void *a, const void *b);
 double **calc_T(Jacobi_output *jacobiOutput, int n, int *k_pointer);
+void free2DMalloc(double **points,int n);
 
 /* Kmeans functions: */
 double calc_distance(const double *dot, const double *centroid, int d);

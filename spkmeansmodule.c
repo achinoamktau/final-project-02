@@ -23,7 +23,7 @@ static PyObject *wam_api(PyObject *self, PyObject *args) {
     double** wam_matrix = wam(data_points, n, d);
     PyObject* result = create2DPyObject(wam_matrix, n, n);
     // we put here a param that tells if we want to print the matrix or not but i dont like it
-    free2DMalloc(data_points);
+    free2DMalloc(data_points, n);
     free_contiguous_mat(wam_matrix);
     return result;
 }
@@ -40,7 +40,7 @@ static PyObject *ddg_api(PyObject *self, PyObject *args) {
     double **wam_matrix = wam(data_points, n, d);
     double **ddg_matrix = ddg(wam_matrix, n);
     PyObject *result = create2DPyObject(ddg_matrix, n, n);
-    free2DMalloc(data_points);
+    free2DMalloc(data_points, n);
     free_contiguous_mat(wam_matrix);
     free_contiguous_mat(ddg_matrix);
     return result;
@@ -58,7 +58,7 @@ static PyObject *gl_api(PyObject *self, PyObject *args) {
     double **ddg_matrix = ddg(wam_matrix, n);
     double **gl_matrix = gl(ddg_matrix, wam_matrix, n);   // this what gl_py but also dont like it
     PyObject *result = create2DPyObject(gl_matrix, n, n);
-    free2DMalloc(data_points);
+    free2DMalloc(data_points, n);
     free_contiguous_mat(wam_matrix);
     free_contiguous_mat(ddg_matrix);
     free_contiguous_mat(gl_matrix);
@@ -77,7 +77,7 @@ static PyObject *jacobi_api(PyObject *self, PyObject *args) {
     Jacobi_output *jacobi_matrix = jacobi(data_points, n);
     double **jacobi_res = create2DfromJacobi(jacobi_matrix, n);
     PyObject *result = create2DPyObject(jacobi_res, n+1, n);
-    free2DMalloc(data_points);
+    free2DMalloc(data_points, n);
     free_contiguous_mat(jacobi_res);
     free(jacobi_matrix->eigenValues);
     free_contiguous_mat(jacobi_matrix->V);
